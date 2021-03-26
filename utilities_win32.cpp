@@ -573,7 +573,7 @@ QImage Utilities::getDesktopWallpaperImage(const int screen)
 
 QColor Utilities::getDesktopBackgroundColor(const int screen)
 {
-    Q_UNUSED(screen);
+    Q_UNUSED(screen); // TODO: make use of it
     if (isWin8OrGreater()) {
         if (SUCCEEDED(CoInitialize(nullptr))) {
             IDesktopWallpaper *pDesktopWallpaper = nullptr;
@@ -608,7 +608,7 @@ QColor Utilities::getDesktopBackgroundColor(const int screen)
 
 Utilities::DesktopWallpaperAspectStyle Utilities::getDesktopWallpaperAspectStyle(const int screen)
 {
-    Q_UNUSED(screen);
+    Q_UNUSED(screen); // TODO: make use of it
     if (isWin8OrGreater()) {
         if (SUCCEEDED(CoInitialize(nullptr))) {
             IDesktopWallpaper *pDesktopWallpaper = nullptr;

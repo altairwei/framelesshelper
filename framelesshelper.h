@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (C) 2020 by wangwenx190 (Yuhang Zhao)
+ * Copyright (C) 2021 by wangwenx190 (Yuhang Zhao)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@
 #include "framelesshelper_global.h"
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-#include <QHash>
-#include <QObject>
+#include <QtCore/qhash.h>
+#include <QtCore/qobject.h>
 
 QT_BEGIN_NAMESPACE
 QT_FORWARD_DECLARE_CLASS(QWindow)

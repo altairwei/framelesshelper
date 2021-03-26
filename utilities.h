@@ -47,7 +47,7 @@ enum class DesktopWallpaperAspectStyle
     Span
 };
 
-// Common
+// Platform independent functions
 FRAMELESSHELPER_EXPORT bool shouldUseWallpaperBlur();
 FRAMELESSHELPER_EXPORT bool shouldUseTraditionalBlur();
 FRAMELESSHELPER_EXPORT bool setBlurEffectEnabled(const QWindow *window, const bool enabled, const QColor &gradientColor = {});
@@ -83,8 +83,13 @@ FRAMELESSHELPER_EXPORT bool isWindowFixedSize(const QWindow *window);
 
 FRAMELESSHELPER_EXPORT bool isMouseInSpecificObjects(const QPointF &mousePos, const QObjectList &objects, const qreal dpr = 1.0);
 
+FRAMELESSHELPER_EXPORT QColor getNativeWindowFrameColor(const bool isActive = true);
+
+FRAMELESSHELPER_EXPORT Qt::Edges getWindowEdgeFromPoint(const QPointF &point, const QWindow *win);
+FRAMELESSHELPER_EXPORT Qt::CursorShape getCursorShapeFromWindowEdge(const Qt::Edges edges);
+
 #ifdef Q_OS_WINDOWS
-// Windows specific
+// Windows specific functions
 FRAMELESSHELPER_EXPORT bool isWin7OrGreater();
 FRAMELESSHELPER_EXPORT bool isWin8OrGreater();
 FRAMELESSHELPER_EXPORT bool isWin8Point1OrGreater();
@@ -107,9 +112,16 @@ FRAMELESSHELPER_EXPORT void updateQtFrameMargins(QWindow *window, const bool ena
 
 FRAMELESSHELPER_EXPORT quint32 getWindowDpi(const QWindow *window);
 FRAMELESSHELPER_EXPORT QMargins getWindowNativeFrameMargins(const QWindow *window);
-FRAMELESSHELPER_EXPORT QColor getNativeWindowFrameColor(const bool isActive = true);
 
 FRAMELESSHELPER_EXPORT void displaySystemMenu(const QWindow *window, const QPoint &pos = {});
+#endif
+
+#ifdef Q_OS_LINUX
+// Linux specific functions
+#endif
+
+#ifdef Q_OS_MACOS
+// macOS specific functions
 #endif
 
 }

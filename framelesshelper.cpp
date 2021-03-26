@@ -120,65 +120,14 @@ bool FramelessHelper::eventFilter(QObject *object, QEvent *event)
     const auto currentWindow = qobject_cast<QWindow *>(object);
     static bool m_bIsMRBPressed = false;
     static QPointF m_pOldMousePos = {};
-    const auto getWindowEdges =
-        [this](const QPointF &point, const int ww, const int wh) -> Qt::Edges {
-        if (point.y() <= m_borderHeight) {
-            if (point.x() <= m_borderWidth) {
-                return Qt::Edge::TopEdge | Qt::Edge::LeftEdge;
-            }
-            if (point.x() >= (ww - m_borderWidth)) {
-                return Qt::Edge::TopEdge | Qt::Edge::RightEdge;
-            }
-            return Qt::Edge::TopEdge;
-        }
-        if (point.y() >= (wh - m_borderHeight)) {
-            if (point.x() <= m_borderWidth) {
-                return Qt::Edge::BottomEdge | Qt::Edge::LeftEdge;
-            }
-            if (point.x() >= (ww - m_borderWidth)) {
-                return Qt::Edge::BottomEdge | Qt::Edge::RightEdge;
-            }
-            return Qt::Edge::BottomEdge;
-        }
-        if (point.x() <= m_borderWidth) {
-            return Qt::Edge::LeftEdge;
-        }
-        if (point.x() >= (ww - m_borderWidth)) {
-            return Qt::Edge::RightEdge;
-        }
-        return {};
-    };
-    const auto getCursorShape = [](const Qt::Edges edges) -> Qt::CursorShape {
-        if ((edges.testFlag(Qt::Edge::TopEdge) && edges.testFlag(Qt::Edge::LeftEdge))
-            || (edges.testFlag(Qt::Edge::BottomEdge) && edges.testFlag(Qt::Edge::RightEdge))) {
-            return Qt::CursorShape::SizeFDiagCursor;
-        }
-        if ((edges.testFlag(Qt::Edge::TopEdge) && edges.testFlag(Qt::Edge::RightEdge))
-            || (edges.testFlag(Qt::Edge::BottomEdge) && edges.testFlag(Qt::Edge::LeftEdge))) {
-            return Qt::CursorShape::SizeBDiagCursor;
-        }
-        if (edges.testFlag(Qt::Edge::TopEdge) || edges.testFlag(Qt::Edge::BottomEdge)) {
-            return Qt::CursorShape::SizeVerCursor;
-        }
-        if (edges.testFlag(Qt::Edge::LeftEdge) || edges.testFlag(Qt::Edge::RightEdge)) {
-            return Qt::CursorShape::SizeHorCursor;
-        }
-        return Qt::CursorShape::ArrowCursor;
-    };
-    const auto isInTitlebarArea = [this](const QPointF &globalPoint,
-                                                               const QPointF &point,
-                                                               const QWindow *window) -> bool {
+    const auto isInTitlebarArea = [this](const QPointF &globalPoint, const QPointF &point, const QWindow *window) -> bool {
         Q_ASSERT(window);
-        return (point.y() <= m_titleBarHeight)
-               && !Utilities::isMouseInSpecificObjects(globalPoint, getIgnoreObjects(window));
+        return (point.y() <= m_titleBarHeight) && !Utilities::isMouseInSpecificObjects(globalPoint, getIgnoreObjects(window));
     };
-    const auto moveOrResize =
-        [this, &getWindowEdges, &isInTitlebarArea](const QPointF &globalPoint,
-                                                                         const QPointF &point,
-                                                                         QWindow *window) {
+    const auto moveOrResize = [this, &isInTitlebarArea](const QPointF &globalPoint, const QPointF &point, QWindow *window) {
             Q_ASSERT(window);
             //const QPointF deltaPoint = globalPoint - m_pOldMousePos;
-            const Qt::Edges edges = getWindowEdges(point, window->width(), window->height());
+            const Qt::Edges edges = Utilities::getWindowEdgeFromPoint(point, window);
             if (edges == Qt::Edges{}) {
                 if (isInTitlebarArea(globalPoint, point, window)) {
                     if (!window->startSystemMove()) {
@@ -245,10 +194,7 @@ bool FramelessHelper::eventFilter(QObject *object, QEvent *event)
         if (mouseEvent) {
             if ((currentWindow->windowState() == Qt::WindowState::WindowNoState)
                 && getResizable(currentWindow)) {
-                currentWindow->setCursor(
-                    getCursorShape(getWindowEdges(getMousePos(mouseEvent, false),
-                                                  currentWindow->width(),
-                                                  currentWindow->height())));
+                currentWindow->setCursor(Utilities::getCursorShapeFromWindowEdge(Utilities::getWindowEdgeFromPoint(getMousePos(mouseEvent, false), currentWindow)));
             }
         }
     } break;

@@ -292,6 +292,49 @@ bool flh_window_start_native_drag_linux(const QWindow *win, const QPoint &pos, c
         x11_emulateButtonRelease(win, pos);
         x11_wmMoveResizeWindow(win, pos.x(), pos.y(), section);
 #endif
+        // TODO: what about wayland?
     }
     return true;
+}
+
+QImage Utilities::getDesktopWallpaperImage(const int screen)
+{
+    // TODO: is there a way to get the wallpaper on Linux?
+    Q_UNUSED(screen);
+    return {};
+}
+
+QColor Utilities::getDesktopBackgroundColor(const int screen)
+{
+    // TODO: is there a way to query it on Linux?
+    Q_UNUSED(screen);
+    return Qt::black;
+}
+
+Utilities::DesktopWallpaperAspectStyle Utilities::getDesktopWallpaperAspectStyle(const int screen)
+{
+    // TODO: is there a way to query it on Linux?
+    Q_UNUSED(screen);
+    return DesktopWallpaperAspectStyle::Central;
+}
+
+QColor Utilities::getNativeWindowFrameColor(const bool isActive)
+{
+    // TODO: is there a way to query it on Linux?
+    return isActive ? Qt::black : Qt::darkGray;
+}
+
+int Utilities::getSystemMetric(const QWindow *window, const SystemMetric metric, const bool dpiAware, const bool forceSystemValue)
+{
+    // TODO
+}
+
+bool Utilities::isLightThemeEnabled()
+{
+    // TODO
+}
+
+bool Utilities::isDarkThemeEnabled()
+{
+    // TODO
 }

@@ -513,3 +513,63 @@ QRect Utilities::getScreenGeometry(const QPoint &pos)
     }
     return QGuiApplication::primaryScreen()->geometry();
 }
+
+Qt::Edges Utilities::getWindowEdgeFromPoint(const QPointF &point, const QWindow *win)
+{
+    Q_ASSERT(win);
+    if (!win) {
+        return {};
+    }
+    Q_ASSERT(!point.isNull());
+    if (point.isNull()) {
+        return {};
+    }
+    const int ww = win->width();
+    const int wh = win->height();
+    const int bw = 8; // TODO: query from system or user
+    const int bh = 8; // TODO: query from system or user
+    if (point.y() <= bh) {
+        if (point.x() <= bw) {
+            return Qt::Edge::TopEdge | Qt::Edge::LeftEdge;
+        }
+        if (point.x() >= (ww - bw)) {
+            return Qt::Edge::TopEdge | Qt::Edge::RightEdge;
+        }
+        return Qt::Edge::TopEdge;
+    }
+    if (point.y() >= (wh - bh)) {
+        if (point.x() <= bw) {
+            return Qt::Edge::BottomEdge | Qt::Edge::LeftEdge;
+        }
+        if (point.x() >= (ww - bw)) {
+            return Qt::Edge::BottomEdge | Qt::Edge::RightEdge;
+        }
+        return Qt::Edge::BottomEdge;
+    }
+    if (point.x() <= bw) {
+        return Qt::Edge::LeftEdge;
+    }
+    if (point.x() >= (ww - bw)) {
+        return Qt::Edge::RightEdge;
+    }
+    return {};
+}
+
+Qt::CursorShape Utilities::getCursorShapeFromWindowEdge(const Qt::Edges edges)
+{
+    if ((edges.testFlag(Qt::TopEdge) && edges.testFlag(Qt::LeftEdge))
+            || (edges.testFlag(Qt::BottomEdge) && edges.testFlag(Qt::RightEdge))) {
+        return Qt::SizeFDiagCursor;
+    }
+    if ((edges.testFlag(Qt::TopEdge) && edges.testFlag(Qt::RightEdge))
+            || (edges.testFlag(Qt::BottomEdge) && edges.testFlag(Qt::LeftEdge))) {
+        return Qt::SizeBDiagCursor;
+    }
+    if (edges.testFlag(Qt::TopEdge) || edges.testFlag(Qt::BottomEdge)) {
+        return Qt::SizeVerCursor;
+    }
+    if (edges.testFlag(Qt::LeftEdge) || edges.testFlag(Qt::RightEdge)) {
+        return Qt::SizeHorCursor;
+    }
+    return Qt::ArrowCursor;
+}

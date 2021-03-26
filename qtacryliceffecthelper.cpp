@@ -38,11 +38,7 @@ QtAcrylicEffectHelper::QtAcrylicEffectHelper(QObject *parent) : QObject(parent)
         m_tintOpacity = 0.6;
     }
 #endif
-#ifdef Q_OS_WINDOWS
     m_frameColor = Utilities::getNativeWindowFrameColor(true);
-#else
-    m_frameColor = Qt::black;
-#endif
 }
 
 QtAcrylicEffectHelper::~QtAcrylicEffectHelper() = default;
