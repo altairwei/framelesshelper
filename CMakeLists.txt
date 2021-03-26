@@ -50,6 +50,8 @@ set(SOURCES
     utilities.cpp
     qtacryliceffecthelper.h
     qtacryliceffecthelper.cpp
+    framelesshelper.h
+    framelesshelper.cpp
 )
 
 if(TARGET Qt${QT_VERSION_MAJOR}::Widgets)
@@ -77,10 +79,6 @@ if(WIN32)
         qtacryliceffecthelper_win32.cpp
     )
 else()
-    list(APPEND SOURCES
-        framelesshelper.h
-        framelesshelper.cpp
-    )
     if(MACOS)
         list(APPEND SOURCES utilities_macos.mm)
     else()

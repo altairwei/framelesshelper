@@ -52,4 +52,8 @@ win32 {
         qtacryliceffecthelper_win32.cpp
     LIBS += -luser32 -lshell32 -lgdi32 -ldwmapi -lole32
     RC_FILE = framelesshelper.rc
+} else: macos {
+    SOURCES += utilities_macos.mm
+} else: unix {
+    SOURCES += utilities_linux.cpp
 }
